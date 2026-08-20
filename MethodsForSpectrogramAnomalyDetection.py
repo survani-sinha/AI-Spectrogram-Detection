@@ -12,6 +12,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
+from google.colab import drive
+drive.mount('/content/drive')
+
 IMAGE_DIR = "/content/Take4/Take4"
 LABELS_CSV = "/content/Take4/Take4/labels.csv"
 SEED = 0
