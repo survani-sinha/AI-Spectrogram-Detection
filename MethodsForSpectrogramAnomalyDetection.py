@@ -27,7 +27,10 @@ LOSS_W   = [1.0, 1.0, 0.3, 1.0, 1.0, 1.0, 1.0]
 MAX_BOXES = 4
 
 def set_seed(s):
-    random.seed(s); np.random.seed(s); torch.manual_seed(s); torch.cuda.manual_seed_all(s)
+    random.seed(s); 
+    np.random.seed(s); 
+    torch.manual_seed(s); 
+    torch.cuda.manual_seed_all(s)
 set_seed(SEED)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
