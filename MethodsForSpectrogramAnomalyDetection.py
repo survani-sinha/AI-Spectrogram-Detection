@@ -14,6 +14,8 @@ from torch.utils.data import Dataset, DataLoader
 
 from google.colab import drive
 drive.mount('/content/drive')
+!cp "/content/drive/MyDrive/Take4.zip" /content/
+!unzip -q "/content/Take4.zip" -d "/content/Take4"
 
 IMAGE_DIR = "/content/Take4/Take4"
 LABELS_CSV = "/content/Take4/Take4/labels.csv"
