@@ -45,7 +45,7 @@ print("all", len(df), "images found")
 print("\nvalid packets per slot (non-NaN):")
 print(df[PACKET].notna().sum())
 
-"""## Method 1: **Classical Method**"""
+## Method 1: Classical Method
 
 def per_packet_gray(path, K=3, k=4.0, min_area=100 // 4): 
     # estimated brightness g of each detected packet, sorted brightest-first
@@ -90,7 +90,7 @@ print("\ncount-recovery rate by tier (Route 1's usable coverage):")
 print(df.assign(match=[len(per_packet_gray(p)) == n for p, n in zip(df.path, df.BoxesDrawn)])
         .groupby("Difficulty")["match"].mean().round(2))
 
-"""Split, Standardization"""
+## Split, Standardization
 
 from sklearn.model_selection import train_test_split
 trainval, test = train_test_split(df, test_size=0.15, stratify=df["Difficulty"], random_state=SEED)
@@ -143,7 +143,7 @@ test_dl  = DataLoader(test_ds,  batch_size=64, shuffle=False, num_workers=0, pin
 xb, yb = next(iter(train_dl))
 print("batch:", xb.shape, "| targets:", yb.shape, "| NaN in targets:", int(torch.isnan(yb).sum()))
 
-"""## Method 2: **CNN**"""
+## Method 2: CNN
 
 def block(cin, cout, k=3, n_convs=2):
     p = k // 2
@@ -190,7 +190,7 @@ def masked_smoothl1(pred, target, beta=0.5):
     per = per * valid * loss_w
     return per.sum() / (valid * loss_w).sum().clamp_min(1e-6)
 
-"""Training"""
+## Training
 
 EPOCHS, PATIENCE, MAX_MINUTES = 400, 30, 90
 
@@ -237,7 +237,7 @@ plt.xlabel("epoch"); plt.ylabel("masked SmoothL1 (z-scored)")
 plt.yscale("log"); plt.legend(); plt.title("Training curve")
 plt.tight_layout(); plt.show()
 
-"""Route 2 (CNN) Evaluation"""
+## Route 2 (CNN) Evaluation
 
 @torch.no_grad()
 def predict(dl):
@@ -294,7 +294,7 @@ for b, v in zip(bars, r2s):
     plt.text(b.get_x() + b.get_width() / 2, v + 0.01, f"{v:.2f}", ha="center", fontsize=9)
 plt.xticks(rotation=25); plt.tight_layout(); plt.show()
 
-"""Difference between two methods"""
+## Difference between two methods
 
 def cnn_packets(pred_row):
     n = int(np.clip(round(pred_row[ALL_OUT.index("NumBoxes")]), 2, MAX_BOXES))
