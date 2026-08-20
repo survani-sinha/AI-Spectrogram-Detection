@@ -1,7 +1,4 @@
-Yes — exactly. You want the **entire README content inside one Markdown code block**, so you can copy it directly into `README.md`. No separate `text`/`bash`/`python` blocks inside it.
-
-```markdown
-# AI-Spectrogram-Detection
+AI-Spectrogram-Detection
 
 This project estimates the gray level (energy) of each individual packet in a spectrogram image.
 
@@ -12,7 +9,7 @@ It compares two methods:
 
 The dataset contains synthetic spectrogram images with rectangular packets on a near-white background. A darker packet represents a higher gray level and therefore more energy.
 
-## Overview
+Overview
 
 The goal is to estimate the gray level of each packet rather than describing the whole image with one average value.
 
@@ -20,7 +17,7 @@ The classical method works well when packets do not overlap. However, overlappin
 
 The CNN does not need to separate the packets. Instead, it uses the entire image to predict information about the packets and can estimate packets even when they overlap.
 
-## Repository Structure
+Repository Structure
 
     .
     ├── MethodsForSpectrogramAnomalyDetection.py
@@ -30,7 +27,7 @@ The CNN does not need to separate the packets. Instead, it uses the entire image
     │   └── labels.csv
     └── README.md
 
-## Installation
+Installation
 
 The project uses Python 3.9 or newer.
 
@@ -52,7 +49,7 @@ The code was developed to run in Google Colab and uses Google Drive to access th
 
 A GPU is recommended for CNN training, but the code can also run on a CPU.
 
-## Running the Code
+Running the Code
 
 The main Python file is:
 
@@ -87,15 +84,15 @@ The dataset paths are defined near the beginning of the file:
     IMAGE_DIR = "/content/Take4/Take4"
     LABELS_CSV = "/content/Take4/Take4/labels.csv"
 
-## Dataset
+Dataset
 
 The dataset contains 3,000 synthetic 256 × 256 grayscale spectrogram images.
 
 There are three difficulty levels:
 
-- **Sparse:** Packets are spread out and usually do not overlap.
-- **Medium:** Packets are placed within 60 pixels of a common center.
-- **Dense:** Packets are placed within 20 pixels of a common center and have more overlap.
+- *Sparse:* Packets are spread out and usually do not overlap.
+- *Medium:* Packets are placed within 60 pixels of a common center.
+- *Dense:* Packets are placed within 20 pixels of a common center and have more overlap.
 
 The images are resized to 128 × 128 before being used by the methods.
 
@@ -122,7 +119,7 @@ Each row in `labels.csv` contains information about one image, including:
 
 If an image has fewer than four packets, the unused values are `NaN`.
 
-## Route 1: Classical Method
+Route 1: Classical Method
 
 The classical method does not require training.
 
@@ -144,7 +141,7 @@ The method uses a calibration value of `0.3` when converting darkness back to gr
 
 The main limitation is overlapping packets. If two packets overlap, they can become one connected component, causing the classical method to treat them as one packet.
 
-## Route 2: CNN
+Route 2: CNN
 
 The CNN takes the entire spectrogram image as input and predicts seven values:
 
@@ -200,7 +197,7 @@ There are 14 weight-bearing layers in total:
 
 The model has 1,572,647 trainable parameters.
 
-## Loss Function
+Loss Function
 
 The CNN uses a masked, weighted Smooth L1 loss.
 
@@ -214,19 +211,19 @@ The output weights are:
 
 `NumBoxes` receives a smaller weight because it has a larger numerical scale than the other outputs.
 
-## Training
+Training
 
 The CNN is trained using AdamW.
 
 The main settings are:
 
-- **Learning rate:** `0.001`
-- **Weight decay:** `0.0001`
-- **Maximum epochs:** `400`
-- **Early stopping patience:** `30` epochs
-- **Maximum training time:** `90` minutes
-- **Training batch size:** `32`
-- **Validation and test batch size:** `64`
+- *Learning rate:* `0.001`
+- *Weight decay:* `0.0001`
+- *Maximum epochs:* `400`
+- *Early stopping patience:* `30` epochs
+- *Maximum training time:* `90` minutes
+- *Training batch size:* `32`
+- *Validation and test batch size:* `64`
 
 The learning rate is reduced when the validation loss stops improving.
 
@@ -240,17 +237,17 @@ Training images are also augmented using:
 
 These changes do not affect the packet gray levels or packet count.
 
-## Data Split
+Data Split
 
 The dataset is divided into:
 
-- **Training:** 2,099 images
-- **Validation:** 451 images
-- **Test:** 450 images
+- *Training:* 2,099 images
+- *Validation:* 451 images
+- *Test:* 450 images
 
 The split is stratified by difficulty level.
 
-## Training and Validation Loss
+Training and Validation Loss
 
 The validation loss can sometimes be lower than the training loss.
 
@@ -260,7 +257,7 @@ During training, the network is intentionally made harder to use by randomly dro
 
 Therefore, it is possible for the validation loss to be lower than the training loss.
 
-## Using the Code
+Using the Code
 
 The script runs the full workflow when executed.
 
@@ -284,7 +281,7 @@ The saved checkpoint contains:
 - Output names
 - Image size
 
-## Outputs
+Outputs
 
 Running the script produces:
 
@@ -295,4 +292,3 @@ Running the script produces:
 - Route 1 coverage results
 - Example predictions
 - A saved CNN model checkpoint
-```
